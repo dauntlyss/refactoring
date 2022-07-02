@@ -191,8 +191,9 @@ public class MancalaPane extends BorderPane {
 			public void handle(ActionEvent event) {
 				Alert about = new Alert(AlertType.INFORMATION);
 				about.setTitle("About");
-				String aboutMessage = "July 2, 2022 + \nAlyssa Harris";
+				String aboutMessage = "Created: July 2, 2022 \nCreator: Alyssa Harris";
 				about.setHeaderText(aboutMessage);
+				about.showAndWait();
 			}
 		});
 		mnuDialog.getItems().addAll(mnuContents, mnuAbout);
