@@ -1,7 +1,5 @@
 package edu.westga.cs6910.mancala.view;
 
-import java.util.Optional;
-
 import edu.westga.cs6910.mancala.model.Game;
 import edu.westga.cs6910.mancala.model.Player;
 import edu.westga.cs6910.mancala.model.strategies.FarStrategy;
@@ -10,9 +8,6 @@ import edu.westga.cs6910.mancala.model.strategies.RandomStrategy;
 import edu.westga.cs6910.mancala.model.strategies.SelectStrategy;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -43,7 +38,7 @@ public class MancalaPane extends BorderPane {
 	private ComputerPane pnComputerPlayer;
 	private StatusPane pnStatus;
 	private NewGamePane pnChooseFirstPlayer;
-	private boolean shouldShowHelpDialog;
+	private MancalaHelpDialog helpDialog;
 	
 	/**
 	 * Creates a pane object to provide the view for the specified
@@ -60,8 +55,8 @@ public class MancalaPane extends BorderPane {
 		}
 		this.theGame = theGame;
 
-		this.shouldShowHelpDialog = true;
-		this.shouldShowHelpDialog = this.showHelpDialog();
+		this.helpDialog = new MancalaHelpDialog();
+		this.helpDialog.showHelpDialog();
 		
 		this.pnContent = new GridPane();
 		
@@ -205,35 +200,6 @@ public class MancalaPane extends BorderPane {
 		this.pnChooseFirstPlayer = new NewGamePane(theGame);
 		topBox.getChildren().add(this.pnChooseFirstPlayer);
 		this.pnContent.add(topBox, 0, 0);
-	}
-	
-	private boolean showHelpDialog() {
-		if (!this.shouldShowHelpDialog) {
-			return false;
-		}
-
-		Alert message = new Alert(AlertType.CONFIRMATION);
-		message.setTitle("CS6910 - Better Mancala");
-		
-		String helpMessage = "Mancala rules:\nPlay against the computer.\n"
-				+ "Alternate taking turns, selecting a pit with stones.\n" 
-				+ "The stones are taken from this pit and placed, one at a\n"
-				+ "   time into consecutive pits in counter-clockwise fashion.\n" 
-				+ "The game ends when one player no longer has any stones\n"
-				+ "   to distribute.\n"
-				+ "The goal is to get more stones into your store,\n" 
-				+ "than your opponent has in their store.";
-				
-		message.setHeaderText(helpMessage);
-		message.setContentText("Would you like to see this dialog at the start of the next game?");
-		
-		ButtonType btnYes = new ButtonType("Yes");
-		ButtonType btnNo = new ButtonType("No");
-		message.getButtonTypes().setAll(btnYes, btnNo);
-		
-		Optional<ButtonType> result = message.showAndWait();
-		
-		return result.get() == btnYes; 
 	}
 	
 	/**
