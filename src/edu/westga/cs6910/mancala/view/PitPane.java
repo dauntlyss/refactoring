@@ -9,6 +9,8 @@ import javafx.scene.layout.GridPane;
 /**
  * Defines the panel that displays a pit with its stones
  * 
+ * @author Alyssa Harris
+ * @version 7-2-22
  */
 public class PitPane extends GridPane implements InvalidationListener {
 	private Label lblPitNumber;

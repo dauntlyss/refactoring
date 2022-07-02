@@ -33,6 +33,8 @@ import javafx.scene.layout.VBox;
  * Defines a GUI for the Mancala game.
  * This class was started by CS6910
  * 
+ * @author Alyssa Harris
+ * @version 7-2-22
  */
 public class MancalaPane extends BorderPane {
 	private Game theGame;

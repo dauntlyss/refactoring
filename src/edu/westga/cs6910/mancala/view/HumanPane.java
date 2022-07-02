@@ -19,6 +19,8 @@ import javafx.scene.layout.HBox;
  * It also allows the user to select the Pit Number to take the stones on their
  * turn.
  * 
+ * @author Alyssa Harris
+ * @version 7-2-22
  */
 public class HumanPane extends GridPane implements InvalidationListener {
 	private ComboBox<String> cmbPitChoice;

@@ -13,6 +13,8 @@ import javafx.scene.layout.HBox;
  * of the game
  * This class was started by CS6910
  * 
+ * @author Alyssa Harris
+ * @version 7-2-22
  */
 public class StatusPane extends GridPane implements InvalidationListener {
 	private Game theGame;
