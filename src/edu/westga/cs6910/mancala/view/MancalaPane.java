@@ -8,6 +8,8 @@ import edu.westga.cs6910.mancala.model.strategies.RandomStrategy;
 import edu.westga.cs6910.mancala.model.strategies.SelectStrategy;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -107,8 +109,10 @@ public class MancalaPane extends BorderPane {
 		Menu mnuFile = this.createFileMenu();
 		
 		Menu mnuSettings = this.createStrategyMenu();
+		
+		Menu mnuDialog = this.createDialogMenu();
 				
-		mnuMain.getMenus().addAll(mnuFile, mnuSettings);
+		mnuMain.getMenus().addAll(mnuFile, mnuSettings, mnuDialog);
 		vbxMenuHolder.getChildren().addAll(mnuMain);
 		this.setTop(vbxMenuHolder);
 	}
@@ -163,6 +167,36 @@ public class MancalaPane extends BorderPane {
 
 		mnuSettings.getItems().addAll(mnuNear, mnuFar, mnuRandom);
 		return mnuSettings;
+	}
+	
+	private Menu createDialogMenu() {
+		Menu mnuDialog = new Menu("_Help");
+		mnuDialog.setMnemonicParsing(true);
+		
+		MenuItem mnuContents = new MenuItem("C_ontents");
+		mnuContents.setMnemonicParsing(true);
+		mnuContents.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
+		mnuContents.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				MancalaPane.this.helpDialog.showHelpDialog();
+			}
+		});
+		
+		MenuItem mnuAbout = new MenuItem("A_bout");
+		mnuAbout.setMnemonicParsing(true);
+		mnuAbout.setAccelerator(new KeyCodeCombination(KeyCode.B, KeyCombination.SHORTCUT_DOWN));
+		mnuAbout.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Alert about = new Alert(AlertType.INFORMATION);
+				about.setTitle("About");
+				String aboutMessage = "July 2, 2022 + \nAlyssa Harris";
+				about.setHeaderText(aboutMessage);
+			}
+		});
+		mnuDialog.getItems().addAll(mnuContents, mnuAbout);
+		return mnuDialog;
 	}
 
 	private Menu createFileMenu() {
