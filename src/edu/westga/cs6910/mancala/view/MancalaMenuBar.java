@@ -5,12 +5,10 @@ import edu.westga.cs6910.mancala.model.strategies.FarStrategy;
 import edu.westga.cs6910.mancala.model.strategies.NearStrategy;
 import edu.westga.cs6910.mancala.model.strategies.RandomStrategy;
 import edu.westga.cs6910.mancala.model.strategies.SelectStrategy;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
@@ -18,8 +16,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
 
 /**
  * Defines all contents needed to display and interact with
