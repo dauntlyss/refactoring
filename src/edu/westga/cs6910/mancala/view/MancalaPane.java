@@ -39,8 +39,10 @@ public class MancalaPane extends BorderPane {
 	private HumanPane pnHumanPlayer;
 	private ComputerPane pnComputerPlayer;
 	private StatusPane pnStatus;
+	private StatusPane pnDummyStatus;
 	private NewGamePane pnChooseFirstPlayer;
 	private MancalaHelpDialog helpDialog;
+	private MancalaMenuBar menuBar;
 	
 	/**
 	 * Creates a pane object to provide the view for the specified
@@ -100,134 +102,155 @@ public class MancalaPane extends BorderPane {
 		rightBox.getChildren().add(this.pnComputerPlayer);
 		this.pnContent.add(rightBox, 0, 1);
 	}
+	
+	private void addDummyPane(Game theGame) {
+		VBox vbxMenuHolder = new VBox();
+		
+	}
 
 	private void createMenu() {
 		VBox vbxMenuHolder = new VBox();
 		
+//		this.menuBar = new MancalaMenuBar(this, this.theGame);
 		MenuBar mnuMain = new MenuBar();
-		
-		Menu mnuFile = this.createFileMenu();
-		
-		Menu mnuSettings = this.createStrategyMenu();
-		
-		Menu mnuDialog = this.createDialogMenu();
+		Menu dummyMenu = this.createDummyMenu();
+//		Menu mnuFile = this.createFileMenu();
+//		Menu mnuSettings = this.createStrategyMenu();
+//		Menu mnuDialog = this.createDialogMenu();
 				
-		mnuMain.getMenus().addAll(mnuFile, mnuSettings, mnuDialog);
-		vbxMenuHolder.getChildren().addAll(mnuMain);
+//		mnuMain.getMenus().addAll(mnuFile, mnuSettings, mnuDialog);
+		mnuMain.getMenus().addAll(dummyMenu);
+		vbxMenuHolder.getChildren().add(mnuMain);
+		vbxMenuHolder.prefWidthProperty().bind(this.widthProperty());
 		this.setTop(vbxMenuHolder);
 	}
-
-	private Menu createStrategyMenu() {
-		Menu mnuSettings = new Menu("_Computer Player");
-		mnuSettings.setMnemonicParsing(true);
-		
-		ToggleGroup tglStrategy = new ToggleGroup();
-		
-		RadioMenuItem mnuNear = new RadioMenuItem("N_ear");
-		mnuNear.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN));
-		mnuNear.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				MancalaPane.this.theGame.getComputerPlayer().setStrategy(new NearStrategy());
-			}
-		});
-		mnuNear.setMnemonicParsing(true);
-		mnuNear.setToggleGroup(tglStrategy);
-		
-		RadioMenuItem mnuFar = new RadioMenuItem("F_ar");
-		mnuFar.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN));
-		mnuFar.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				MancalaPane.this.theGame.getComputerPlayer().setStrategy(new FarStrategy());
-			}
-		});
-		mnuFar.setMnemonicParsing(true);
-		mnuFar.setToggleGroup(tglStrategy);
-		
-		RadioMenuItem mnuRandom = new RadioMenuItem("_Random");
-		mnuRandom.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN));
-		mnuRandom.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				MancalaPane.this.theGame.getComputerPlayer().setStrategy(new RandomStrategy());
-			}
-		});
-		mnuRandom.setMnemonicParsing(true);
-		mnuRandom.setToggleGroup(tglStrategy);
-		
-		SelectStrategy currentStrategy = this.theGame.getComputerPlayer().getStrategy();			
-		if (currentStrategy.getClass() == NearStrategy.class) {
-			mnuNear.setSelected(true);
-		} else if (currentStrategy.getClass() == RandomStrategy.class) {
-			mnuRandom.setSelected(true);
-		} else {
-			mnuFar.setSelected(true);
-		}
-
-		mnuSettings.getItems().addAll(mnuNear, mnuFar, mnuRandom);
-		return mnuSettings;
-	}
 	
-	private Menu createDialogMenu() {
-		Menu mnuDialog = new Menu("_Help");
-		mnuDialog.setMnemonicParsing(true);
+	private Menu createDummyMenu() {
+		Menu mnuDumb = new Menu("_Dummy");
+		mnuDumb.setMnemonicParsing(true);
 		
-		MenuItem mnuContents = new MenuItem("C_ontents");
-		mnuContents.setMnemonicParsing(true);
-		mnuContents.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
-		mnuContents.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				MancalaPane.this.helpDialog.showHelpDialog();
-			}
-		});
+		ToggleGroup tglDumb = new ToggleGroup();
 		
-		MenuItem mnuAbout = new MenuItem("A_bout");
-		mnuAbout.setMnemonicParsing(true);
-		mnuAbout.setAccelerator(new KeyCodeCombination(KeyCode.B, KeyCombination.SHORTCUT_DOWN));
-		mnuAbout.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Alert about = new Alert(AlertType.INFORMATION);
-				about.setTitle("About");
-				String aboutMessage = "Created: July 2, 2022 \nCreator: Alyssa Harris";
-				about.setHeaderText(aboutMessage);
-				about.showAndWait();
-			}
-		});
-		mnuDialog.getItems().addAll(mnuContents, mnuAbout);
-		return mnuDialog;
+		RadioMenuItem mnuWork = new RadioMenuItem("_Work");
+		mnuWork.setToggleGroup(tglDumb);
+		RadioMenuItem mnuTwork = new RadioMenuItem("_Twork");
+		mnuWork.setToggleGroup(tglDumb);
+		
+		mnuDumb.getItems().addAll(mnuWork, mnuTwork);
+		return mnuDumb;
 	}
-
-	private Menu createFileMenu() {
-		Menu mnuFile = new Menu("_Game");
-		mnuFile.setMnemonicParsing(true);
-	
-		MenuItem mnuNew = new MenuItem("_New");
-		mnuNew.setMnemonicParsing(true);
-		mnuNew.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN));
-		mnuNew.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				if (MancalaPane.this.pnChooseFirstPlayer.isHumanFirst()) {
-					MancalaPane.this.theGame.startNewGame(MancalaPane.this.theGame.getHumanPlayer());
-				} else if (MancalaPane.this.pnChooseFirstPlayer.isComputerFirst()) {
-					MancalaPane.this.theGame.startNewGame(MancalaPane.this.theGame.getComputerPlayer());
-				} else if (MancalaPane.this.pnChooseFirstPlayer.isRandomFirst()) {
-					MancalaPane.this.pnChooseFirstPlayer.chooseRandomPlayer();
-				}
-			}
-		});
-		
-		MenuItem mnuExit = new MenuItem("E_xit");
-		mnuExit.setMnemonicParsing(true);
-		mnuExit.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.SHORTCUT_DOWN));
-		mnuExit.setOnAction(event -> System.exit(0));
-		
-		mnuFile.getItems().addAll(mnuNew, mnuExit);
-		return mnuFile;
-	}
+//
+//	private Menu createStrategyMenu() {
+//		Menu mnuSettings = new Menu("_Computer Player");
+//		mnuSettings.setMnemonicParsing(true);
+//		
+//		ToggleGroup tglStrategy = new ToggleGroup();
+//		
+//		RadioMenuItem mnuNear = new RadioMenuItem("N_ear");
+//		mnuNear.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN));
+//		mnuNear.setOnAction(new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent arg0) {
+//				MancalaPane.this.theGame.getComputerPlayer().setStrategy(new NearStrategy());
+//			}
+//		});
+//		mnuNear.setMnemonicParsing(true);
+//		mnuNear.setToggleGroup(tglStrategy);
+//		
+//		RadioMenuItem mnuFar = new RadioMenuItem("F_ar");
+//		mnuFar.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN));
+//		mnuFar.setOnAction(new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent arg0) {
+//				MancalaPane.this.theGame.getComputerPlayer().setStrategy(new FarStrategy());
+//			}
+//		});
+//		mnuFar.setMnemonicParsing(true);
+//		mnuFar.setToggleGroup(tglStrategy);
+//		
+//		RadioMenuItem mnuRandom = new RadioMenuItem("_Random");
+//		mnuRandom.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN));
+//		mnuRandom.setOnAction(new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent arg0) {
+//				MancalaPane.this.theGame.getComputerPlayer().setStrategy(new RandomStrategy());
+//			}
+//		});
+//		mnuRandom.setMnemonicParsing(true);
+//		mnuRandom.setToggleGroup(tglStrategy);
+//		
+//		SelectStrategy currentStrategy = this.theGame.getComputerPlayer().getStrategy();			
+//		if (currentStrategy.getClass() == NearStrategy.class) {
+//			mnuNear.setSelected(true);
+//		} else if (currentStrategy.getClass() == RandomStrategy.class) {
+//			mnuRandom.setSelected(true);
+//		} else {
+//			mnuFar.setSelected(true);
+//		}
+//
+//		mnuSettings.getItems().addAll(mnuNear, mnuFar, mnuRandom);
+//		return mnuSettings;
+//	}
+//	
+//	private Menu createDialogMenu() {
+//		Menu mnuDialog = new Menu("_Help");
+//		mnuDialog.setMnemonicParsing(true);
+//		
+//		MenuItem mnuContents = new MenuItem("C_ontents");
+//		mnuContents.setMnemonicParsing(true);
+//		mnuContents.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
+//		mnuContents.setOnAction(new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent event) {
+//				MancalaPane.this.helpDialog.showHelpDialog();
+//			}
+//		});
+//		
+//		MenuItem mnuAbout = new MenuItem("A_bout");
+//		mnuAbout.setMnemonicParsing(true);
+//		mnuAbout.setAccelerator(new KeyCodeCombination(KeyCode.B, KeyCombination.SHORTCUT_DOWN));
+//		mnuAbout.setOnAction(new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent event) {
+//				Alert about = new Alert(AlertType.INFORMATION);
+//				about.setTitle("About");
+//				String aboutMessage = "Created: July 2, 2022 \nCreator: Alyssa Harris";
+//				about.setHeaderText(aboutMessage);
+//				about.showAndWait();
+//			}
+//		});
+//		mnuDialog.getItems().addAll(mnuContents, mnuAbout);
+//		return mnuDialog;
+//	}
+//
+//	private Menu createFileMenu() {
+//		Menu mnuFile = new Menu("_Game");
+//		mnuFile.setMnemonicParsing(true);
+//	
+//		MenuItem mnuNew = new MenuItem("_New");
+//		mnuNew.setMnemonicParsing(true);
+//		mnuNew.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN));
+//		mnuNew.setOnAction(new EventHandler<ActionEvent>() {
+//			@Override
+//			public void handle(ActionEvent event) {
+//				if (MancalaPane.this.pnChooseFirstPlayer.isHumanFirst()) {
+//					MancalaPane.this.theGame.startNewGame(MancalaPane.this.theGame.getHumanPlayer());
+//				} else if (MancalaPane.this.pnChooseFirstPlayer.isComputerFirst()) {
+//					MancalaPane.this.theGame.startNewGame(MancalaPane.this.theGame.getComputerPlayer());
+//				} else if (MancalaPane.this.pnChooseFirstPlayer.isRandomFirst()) {
+//					MancalaPane.this.pnChooseFirstPlayer.chooseRandomPlayer();
+//				}
+//			}
+//		});
+//		
+//		MenuItem mnuExit = new MenuItem("E_xit");
+//		mnuExit.setMnemonicParsing(true);
+//		mnuExit.setAccelerator(new KeyCodeCombination(KeyCode.X, KeyCombination.SHORTCUT_DOWN));
+//		mnuExit.setOnAction(event -> System.exit(0));
+//		
+//		mnuFile.getItems().addAll(mnuNew, mnuExit);
+//		return mnuFile;
+//	}
 	
 	private void addFirstPlayerChooserPane(Game theGame) {
 		HBox topBox = new HBox();
