@@ -5,6 +5,7 @@ import edu.westga.cs6910.mancala.model.strategies.FarStrategy;
 import edu.westga.cs6910.mancala.model.strategies.NearStrategy;
 import edu.westga.cs6910.mancala.model.strategies.RandomStrategy;
 import edu.westga.cs6910.mancala.model.strategies.SelectStrategy;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -27,89 +28,37 @@ import javafx.scene.layout.VBox;
  * @author Alyssa Harris
  * @version Jul 5, 2022
  */
-public class MancalaMenuBar extends GridPane {
-	private MenuBar mnuMain;
+public class MancalaMenuBar {
 	private Menu mnuFile;
 	private Menu mnuSettings;
 	private Menu mnuDialog;
 	private Game theGame;
 	private MancalaHelpDialog helpDialog;
-	private MancalaPane theMancalaPane;
 	
 	/**
 	 * Creates a new MancalaMenuBar that holds all menus needed for
 	 * game.
 	 * 
 	 * @param theGame the model object from which this bar gets its data
-	 * @param theMancalaPane the pane the menu is added to
 	 */
-	public MancalaMenuBar(MancalaPane theMancalaPane, Game theGame) {
+	public MancalaMenuBar(Game theGame) {
 		this.theGame = theGame;
-		
-		this.theMancalaPane = theMancalaPane;
-		
-		this.createMenuBar();
-		System.out.println("getting to menu bar");
-		
-//		this.mnuMain.prefWidthProperty().bind(this.theMancalaPane.widthProperty());
-	}
-	
-	private MenuBar createMenuBar() {
-		this.mnuMain = new MenuBar();
-		
-		this.mnuFile = this.createFileMenu();
-		
-		this.mnuSettings = this.createStrategyMenu();
-		
-		this.mnuDialog = this.createDialogMenu();
-				
-		this.mnuMain.getMenus().addAll(this.mnuFile, this.mnuSettings, this.mnuDialog);
-		System.out.println("getting to create menu bar");
-		return this.mnuMain;
-		
+		this.helpDialog = new MancalaHelpDialog();
 	}
 
-	private Menu createStrategyMenu() {
+	/**
+	 * Creates the strategy menu for the computer player
+	 *  
+	 * @return mnuSettings the strategy menu
+	 */
+	public Menu createStrategyMenu() {
 		this.mnuSettings = new Menu("_Computer Player");
 		this.mnuSettings.setMnemonicParsing(true);
 		
-//		ToggleGroup tglStrategy = new ToggleGroup();
-//		
-//		RadioMenuItem mnuNear = new RadioMenuItem("N_ear");
-//		mnuNear.setAccelerator(new KeyCodeCombination(KeyCode.E, KeyCombination.SHORTCUT_DOWN));
-//		mnuNear.setOnAction(new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent arg0) {
-//				MancalaPane.theGame.getComputerPlayer().setStrategy(new NearStrategy());
-//			}
-//		});
-//		mnuNear.setMnemonicParsing(true);
-//		mnuNear.setToggleGroup(tglStrategy);
-//		
-//		RadioMenuItem mnuFar = new RadioMenuItem("F_ar");
-//		mnuFar.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN));
-//		mnuFar.setOnAction(new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent arg0) {
-//				MancalaPane.this.theGame.getComputerPlayer().setStrategy(new FarStrategy());
-//			}
-//		});
-//		mnuFar.setMnemonicParsing(true);
-//		mnuFar.setToggleGroup(tglStrategy);
-		
-//		RadioMenuItem mnuRandom = new RadioMenuItem("_Random");
-//		mnuRandom.setAccelerator(new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN));
-//		mnuRandom.setOnAction(new EventHandler<ActionEvent>() {
-//			@Override
-//			public void handle(ActionEvent arg0) {
-//				MancalaPane.this.theGame.getComputerPlayer().setStrategy(new RandomStrategy());
-//			}
-//		});
-//		mnuRandom.setMnemonicParsing(true);
-//		mnuRandom.setToggleGroup(tglStrategy);
 		RadioMenuItem mnuNear = this.addStrategyItem("N_ear", "E", new NearStrategy());
 		RadioMenuItem mnuFar = this.addStrategyItem("F_ar", "A", new FarStrategy());
 		RadioMenuItem mnuRandom = this.addStrategyItem("_Random", "R", new RandomStrategy());
+		this.setMenuToggleGroup(mnuNear, mnuFar, mnuRandom);
 		
 		SelectStrategy currentStrategy = this.theGame.getComputerPlayer().getStrategy();			
 		if (currentStrategy.getClass() == NearStrategy.class) {
@@ -125,8 +74,6 @@ public class MancalaMenuBar extends GridPane {
 	}
 	
 	private RadioMenuItem addStrategyItem(String radioMenuItemText, String shortcutKey, SelectStrategy someStrategy) {
-		ToggleGroup tglStrategy = new ToggleGroup();
-		
 		RadioMenuItem mnuItem = new RadioMenuItem(radioMenuItemText);
 		mnuItem.setAccelerator(KeyCombination.keyCombination("shortcut + " + shortcutKey));
 		mnuItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -136,12 +83,25 @@ public class MancalaMenuBar extends GridPane {
 			}
 		});
 		mnuItem.setMnemonicParsing(true);
-		mnuItem.setToggleGroup(tglStrategy);
 		
 		return mnuItem;
 	}
 	
-	private Menu createDialogMenu() {
+	private ToggleGroup setMenuToggleGroup(RadioMenuItem item1, RadioMenuItem item2, RadioMenuItem item3) {
+		ToggleGroup tglStrategy = new ToggleGroup();
+		item1.setToggleGroup(tglStrategy);
+		item2.setToggleGroup(tglStrategy);
+		item3.setToggleGroup(tglStrategy);
+		
+		return tglStrategy;
+	}
+	
+	/**
+	 * Creates the help dialog menu
+	 * 
+	 * @return mnuDialog the dialog menu
+	 */
+	public Menu createDialogMenu() {
 		this.mnuDialog = new Menu("_Help");
 		this.mnuDialog.setMnemonicParsing(true);
 		
@@ -172,7 +132,12 @@ public class MancalaMenuBar extends GridPane {
 		return this.mnuDialog;
 	}
 
-	private Menu createFileMenu() {
+	/**
+	 * Creates the file menu to start a new game or quit
+	 * 
+	 * @return mnuFile the file menu
+	 */
+	public Menu createFileMenu() {
 		this.mnuFile = new Menu("_Game");
 		this.mnuFile.setMnemonicParsing(true);
 	
