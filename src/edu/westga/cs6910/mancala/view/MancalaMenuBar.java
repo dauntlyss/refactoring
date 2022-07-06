@@ -145,12 +145,7 @@ public class MancalaMenuBar {
 		MenuItem mnuNew = new MenuItem("_New");
 		mnuNew.setMnemonicParsing(true);
 		mnuNew.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN));
-		mnuNew.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				MancalaMenuBar.this.getNewGameFirstPlayer();
-			}
-		});
+		mnuNew.setOnAction(new NewGameListener());
 		
 		MenuItem mnuExit = new MenuItem("E_xit");
 		mnuExit.setMnemonicParsing(true);
@@ -161,15 +156,23 @@ public class MancalaMenuBar {
 		return this.mnuFile;
 	}
 	
-	private void getNewGameFirstPlayer() {
-		if (this.newGamePane.isHumanFirst()) {
-			this.theGame.startNewGame(this.theGame.getHumanPlayer());
-		} else if (this.newGamePane.isComputerFirst()) {
-			this.theGame.startNewGame(this.theGame.getComputerPlayer());
-		} else if (this.newGamePane.isRandomFirst()) {
-			this.newGamePane.chooseRandomPlayer();
-		} else {
-			System.out.println("WTF");
+	/** 
+	 * Defines the listener for new Game button.
+	 */		
+	private class NewGameListener implements EventHandler<ActionEvent> {
+		@Override
+		/** 
+		 * Enables the PlayerPanel for the first player and starts a new game. 
+		 * Event handler for a click in the New Game button in the menu.
+		 */
+		public void handle(ActionEvent arg0) {
+			if (MancalaMenuBar.this.theMancalaPane.getPnChooseFirstPlayer().isHumanFirst()) {
+				MancalaMenuBar.this.theGame.startNewGame(MancalaMenuBar.this.theGame.getHumanPlayer());
+			} else if (MancalaMenuBar.this.theMancalaPane.getPnChooseFirstPlayer().isComputerFirst()) {
+				MancalaMenuBar.this.theGame.startNewGame(MancalaMenuBar.this.theGame.getComputerPlayer());
+			} else if (MancalaMenuBar.this.theMancalaPane.getPnChooseFirstPlayer().isRandomFirst()) {
+				MancalaMenuBar.this.newGamePane.chooseRandomPlayer();
+			}
 		}
 	}
 }
