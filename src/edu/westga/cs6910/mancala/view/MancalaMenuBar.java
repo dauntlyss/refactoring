@@ -30,15 +30,20 @@ public class MancalaMenuBar {
 	private Menu mnuDialog;
 	private Game theGame;
 	private MancalaHelpDialog helpDialog;
+	private NewGamePane newGamePane;
+	private MancalaPane theMancalaPane;
 	
 	/**
 	 * Creates a new MancalaMenuBar that holds all menus needed for
 	 * game.
 	 * 
+	 * @param theMancalaPane pane object to provide the view for the specified Game model object.
 	 * @param theGame the model object from which this bar gets its data
 	 */
-	public MancalaMenuBar(Game theGame) {
+	public MancalaMenuBar(MancalaPane theMancalaPane, Game theGame) {
+		this.theMancalaPane = theMancalaPane;
 		this.theGame = theGame;
+		this.newGamePane = new NewGamePane(this.theMancalaPane, this.theGame);
 		this.helpDialog = new MancalaHelpDialog();
 	}
 
@@ -143,14 +148,7 @@ public class MancalaMenuBar {
 		mnuNew.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-//				if (MancalaMenuBar.this.theMancalaPane.pnChooseFirstPlayer.isHumanFirst()) {
-//					MancalaPane.this.theGame.startNewGame(MancalaPane.this.theGame.getHumanPlayer());
-//				} else if (MancalaPane.this.pnChooseFirstPlayer.isComputerFirst()) {
-//					MancalaPane.this.theGame.startNewGame(MancalaPane.this.theGame.getComputerPlayer());
-//				} else if (MancalaPane.this.pnChooseFirstPlayer.isRandomFirst()) {
-//					MancalaPane.this.pnChooseFirstPlayer.chooseRandomPlayer();
-//				}
-				System.out.println("Fix new game stuff");
+				MancalaMenuBar.this.getNewGameFirstPlayer();
 			}
 		});
 		
@@ -161,5 +159,17 @@ public class MancalaMenuBar {
 		
 		this.mnuFile.getItems().addAll(mnuNew, mnuExit);
 		return this.mnuFile;
+	}
+	
+	private void getNewGameFirstPlayer() {
+		if (this.newGamePane.isHumanFirst()) {
+			this.theGame.startNewGame(this.theGame.getHumanPlayer());
+		} else if (this.newGamePane.isComputerFirst()) {
+			this.theGame.startNewGame(this.theGame.getComputerPlayer());
+		} else if (this.newGamePane.isRandomFirst()) {
+			this.newGamePane.chooseRandomPlayer();
+		} else {
+			System.out.println("WTF");
+		}
 	}
 }

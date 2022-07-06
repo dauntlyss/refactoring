@@ -1,15 +1,8 @@
 package edu.westga.cs6910.mancala.view;
 
 import edu.westga.cs6910.mancala.model.Game;
-import edu.westga.cs6910.mancala.model.Player;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -84,7 +77,7 @@ public class MancalaPane extends BorderPane {
 
 	private void addComputerPlayerPane(Game theGame) {
 		this.pnComputerPlayer = new ComputerPane(theGame);
-		this.pnComputerPlayer.setDisable(true);		
+		this.pnComputerPlayer.setDisable(true);			
 		HBox rightBox = new HBox();
 		rightBox.getStyleClass().add("pane-border");	
 		rightBox.getChildren().add(this.pnComputerPlayer);
@@ -94,7 +87,7 @@ public class MancalaPane extends BorderPane {
 	private void createMenu() {
 		VBox vbxMenuHolder = new VBox();
 		
-		this.menuBar = new MancalaMenuBar(this.theGame);
+		this.menuBar = new MancalaMenuBar(this, this.theGame);
 		Menu mnuFile = this.menuBar.createFileMenu();
 		Menu mnuSettings = this.menuBar.createStrategyMenu();
 		Menu mnuDialog = this.menuBar.createDialogMenu();
@@ -110,144 +103,50 @@ public class MancalaPane extends BorderPane {
 	private void addFirstPlayerChooserPane(Game theGame) {
 		HBox topBox = new HBox();
 		topBox.getStyleClass().add("pane-border");	
-		this.pnChooseFirstPlayer = new NewGamePane(theGame);
+		this.pnChooseFirstPlayer = new NewGamePane(this, theGame);
 		topBox.getChildren().add(this.pnChooseFirstPlayer);
 		this.pnContent.add(topBox, 0, 0);
 	}
+
+	/**
+	 * @param pnChooseFirstPlayer the pnChooseFirstPlayer to set
+	 */
+	public void setPnComputerPlayer(ComputerPane pnComputerPlayer) {
+		this.pnComputerPlayer = pnComputerPlayer;
+	}
 	
 	/**
-	 * Defines the panel in which the user selects which Player plays first.
+	 * @return the pnComputerPlayer
 	 */
-	private final class NewGamePane extends GridPane {
-		private RadioButton radHumanPlayer;
-		private RadioButton radComputerPlayer;
-		private RadioButton radRandomPlayer;
-		private ComboBox<Integer> cmbGoalScore;
-		
-		private Game theGame;
-		private Player theHuman;
-		private Player theComputer;
+	public ComputerPane getPnComputerPlayer() {
+		return this.pnComputerPlayer;
+	}
+//
+	/**
+	 * @return the pnChooseFirstPlayer
+	 */
+	public NewGamePane getPnChooseFirstPlayer() {
+		return this.pnChooseFirstPlayer;
+	}
 
-		private NewGamePane(Game theGame) {
-			this.theGame = theGame;
-			
-			this.theHuman = this.theGame.getHumanPlayer();
-			this.theComputer = this.theGame.getComputerPlayer();
-			
-			this.buildPane();
-		}
-		
-		private void buildPane() {
-			this.setHgap(20);
-			
-			this.createNumberOfStonesChoice();
-			
-			this.createFirstPlayerItems();	
-		}
+	/**
+	 * @param pnChooseFirstPlayer the pnChooseFirstPlayer to set
+	 */
+	public void setPnChooseFirstPlayer(NewGamePane pnChooseFirstPlayer) {
+		this.pnChooseFirstPlayer = pnChooseFirstPlayer;
+	}
 
-		private void createFirstPlayerItems() {
-			this.radHumanPlayer = new RadioButton(this.theHuman.getName() + " first");	
-			this.radHumanPlayer.setOnAction(new HumanFirstListener());
-			
-			this.radComputerPlayer = new RadioButton(this.theComputer.getName() + " first");
-			this.radComputerPlayer.setOnAction(new ComputerFirstListener());
-			
-			this.radRandomPlayer = new RadioButton("Random player first");
-			this.radRandomPlayer.setOnAction(new RandomFirstListener());
-			
-			ToggleGroup group = new ToggleGroup();
-			this.radHumanPlayer.setToggleGroup(group);
-			this.radComputerPlayer.setToggleGroup(group);
-			this.radRandomPlayer.setToggleGroup(group);
+	/**
+	 * @return the pnHumanPlayer
+	 */
+	public HumanPane getPnHumanPlayer() {
+		return this.pnHumanPlayer;
+	}
 
-			this.add(this.radHumanPlayer, 2, 0);
-			this.add(this.radComputerPlayer, 3, 0);
-			this.add(this.radRandomPlayer, 4, 0);
-		}
-		
-		private void createNumberOfStonesChoice() {
-			Label lblGoalScore = new Label("Starting Stones: ");
-			this.add(lblGoalScore, 0, 0);
-			
-			this.cmbGoalScore = new ComboBox<Integer>();
-			this.cmbGoalScore.getItems().addAll(1, 2, 3);
-			this.cmbGoalScore.setValue(1);
-			this.cmbGoalScore.setOnAction(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					int startingStones = NewGamePane.this.cmbGoalScore.getValue();
-					MancalaPane.this.theGame.setStartingStones(startingStones);
-				}
-			});
-			this.add(this.cmbGoalScore, 1, 0);
-		}
-
-		public boolean isHumanFirst() {
-			return this.radHumanPlayer.isSelected();
-		}
-		
-		public boolean isComputerFirst() {
-			return this.radComputerPlayer.isSelected();
-		}
-		
-		public boolean isRandomFirst() {
-			return this.radRandomPlayer.isSelected();
-		}
-
-		public void chooseRandomPlayer() {
-			if (Math.random() * 10 <= 4) {
-				MancalaPane.this.theGame.startNewGame(MancalaPane.this.theGame.getHumanPlayer());
-			} else {
-				MancalaPane.this.theGame.startNewGame(MancalaPane.this.theGame.getComputerPlayer());
-			}
-		}
-		
-		/** 
-		 * Defines the listener for computer player first button.
-		 */		
-		private class RandomFirstListener implements EventHandler<ActionEvent> {
-			@Override
-			/** 
-			 * Enables the ComputerPlayerPanel and starts a new game. 
-			 * Event handler for a click in the computerPlayerButton.
-			 */
-			public void handle(ActionEvent arg0) {
-				MancalaPane.this.pnChooseFirstPlayer.setDisable(true);
-
-				NewGamePane.this.chooseRandomPlayer();
-			}
-		}
-		
-		/** 
-		 * Defines the listener for computer player first button.
-		 */		
-		private class ComputerFirstListener implements EventHandler<ActionEvent> {
-			@Override
-			/** 
-			 * Enables the ComputerPlayerPanel and starts a new game. 
-			 * Event handler for a click in the computerPlayerButton.
-			 */
-			public void handle(ActionEvent arg0) {
-				MancalaPane.this.pnComputerPlayer.setDisable(false);
-				MancalaPane.this.pnChooseFirstPlayer.setDisable(true);
-				MancalaPane.this.theGame.startNewGame(NewGamePane.this.theComputer);
-			}
-		}
-	
-		/** 
-		 * Defines the listener for human player first button.
-		 */	
-		private class HumanFirstListener implements EventHandler<ActionEvent> {
-			@Override
-			/** 
-			 * Sets up user interface and starts a new game. 
-			 * Event handler for a click in the human player button.
-			 */
-			public void handle(ActionEvent event) {
-				MancalaPane.this.pnChooseFirstPlayer.setDisable(true);
-				MancalaPane.this.pnHumanPlayer.setDisable(false);
-				MancalaPane.this.theGame.startNewGame(NewGamePane.this.theHuman);
-			}
-		}
+	/**
+	 * @param pnHumanPlayer the pnHumanPlayer to set
+	 */
+	public void setPnHumanPlayer(HumanPane pnHumanPlayer) {
+		this.pnHumanPlayer = pnHumanPlayer;
 	}
 }
