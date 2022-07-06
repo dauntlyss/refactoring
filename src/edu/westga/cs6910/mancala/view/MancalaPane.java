@@ -107,22 +107,18 @@ public class MancalaPane extends BorderPane {
 		topBox.getChildren().add(this.pnChooseFirstPlayer);
 		this.pnContent.add(topBox, 0, 0);
 	}
-
-	/**
-	 * @param pnChooseFirstPlayer the pnChooseFirstPlayer to set
-	 */
-	public void setPnComputerPlayer(ComputerPane pnComputerPlayer) {
-		this.pnComputerPlayer = pnComputerPlayer;
-	}
 	
 	/**
+	 * Returns the computerPane for this object
+	 * 
 	 * @return the pnComputerPlayer
 	 */
 	public ComputerPane getPnComputerPlayer() {
 		return this.pnComputerPlayer;
 	}
-//
+
 	/**
+	 * Returns the ChooseFirstPlayerPane for this object
 	 * @return the pnChooseFirstPlayer
 	 */
 	public NewGamePane getPnChooseFirstPlayer() {
@@ -130,23 +126,12 @@ public class MancalaPane extends BorderPane {
 	}
 
 	/**
-	 * @param pnChooseFirstPlayer the pnChooseFirstPlayer to set
-	 */
-	public void setPnChooseFirstPlayer(NewGamePane pnChooseFirstPlayer) {
-		this.pnChooseFirstPlayer = pnChooseFirstPlayer;
-	}
-
-	/**
+	 * Returns the HumanPane for this object
+	 * 
 	 * @return the pnHumanPlayer
 	 */
 	public HumanPane getPnHumanPlayer() {
 		return this.pnHumanPlayer;
 	}
 
-	/**
-	 * @param pnHumanPlayer the pnHumanPlayer to set
-	 */
-	public void setPnHumanPlayer(HumanPane pnHumanPlayer) {
-		this.pnHumanPlayer = pnHumanPlayer;
-	}
 }
